@@ -12,6 +12,8 @@ namespace xbox_data
         internal static void Start()
         {
             List<Keyword> k_list = new List<Keyword>();
+            MysqlHelper mysqlhelper = new MysqlHelper();
+            k_list = mysqlhelper.GetKeywordList();
             Keyword key = new Keyword();
             key.Word = "一元二次函数";
             k_list.Add(key);
@@ -19,8 +21,14 @@ namespace xbox_data
             {
                 SearchHelper searchhelper = new SearchHelper();
                 List<Video> v_list=searchhelper.Search(one_keyword);
-                MysqlHelper mysqlhelper = new MysqlHelper();
-                mysqlhelper.Handle(v_list);
+                string sql = "";
+                foreach (Video one_video in v_list)
+                {
+                    sql += "insert into ";
+
+                    
+                }
+                mysqlhelper.InsertSQL(sql);
             }
 
         }

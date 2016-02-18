@@ -2,6 +2,7 @@
 {
     class Keyword
     {
+        public Keyword Id { get; internal set; }
         public string Word { get; set; }
     }
 }
