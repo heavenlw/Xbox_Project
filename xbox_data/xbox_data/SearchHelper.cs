@@ -16,12 +16,12 @@ namespace xbox_data
 
      
 
-        internal List<Video> Search(Keyword one_keyword)
+        internal List<Video> Search(Keyword one_keyword,Seed seed)
         {
             List<Video> video_list = new List<Video>();
-            for (int i = 1; i <= 20; i++)
+            for (int i = 1; i <= 1; i++)
             {
-                string url = string.Format("http://www.soku.com/v/?keyword={0}&orderby=1&time_length=1&limit_date=0&site=0&_lg=1&page={1}", one_keyword.Word,i);
+                string url = string.Format(seed.Url, one_keyword.Word);
                 // List<string> url_list = new List<string>();
                 Uri uri = new Uri(url);
 
@@ -60,13 +60,13 @@ namespace xbox_data
                 }
                 if (res != null && res.Length > 200)
                 {
-                    MatchCollection matches = Regex.Matches(res, "<div class=\"v-meta va\">.*?</div>", RegexOptions.Singleline);
+                    MatchCollection matches = Regex.Matches(res,seed.List, RegexOptions.Singleline);
 
                     foreach (Match mac in matches)
                     {
                         Video video = new Video();
-                        string title = Regex.Match(mac.ToString(), "title=\"(.*?)\"", RegexOptions.Singleline).Groups[1].ToString();
-                        string link = Regex.Match(mac.ToString(), "http://www.soku.com/u\\?url=(.*?)\"", RegexOptions.Singleline).Groups[1].ToString();
+                        string title = Regex.Match(mac.ToString(), seed.Title, RegexOptions.Singleline).Groups[1].ToString();
+                        string link = Regex.Match(mac.ToString(), seed.Link, RegexOptions.Singleline).Groups[1].ToString();
                         video.Title = title;
                         video.Link = link;
                         Console.WriteLine(title);

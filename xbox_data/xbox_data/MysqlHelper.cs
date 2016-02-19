@@ -7,7 +7,7 @@ namespace xbox_data
 {
     internal class MysqlHelper
     {
-        private String connStr = "server=awol.cvlp2mlfriyg.us-west-2.rds.amazonaws.com; uid=heavenlw;pwd=550804648;database=aws";
+        private String connStr = "server=awol.cvlp2mlfriyg.us-west-2.rds.amazonaws.com; uid=heavenlw;pwd=550804648;database=xbox_data";
         internal void Handle(List<Video> v_list)
         {
             
@@ -16,7 +16,7 @@ namespace xbox_data
         internal List<Keyword> GetKeywordList()
         {
             List<Keyword> seeds = new List<Keyword>();
-            string selectSeeds_sql = "select * from url where status = 0 limit 5";
+            string selectSeeds_sql = "select * from keyword";
             DataSet testDataSet = null;
             MySqlConnection conn = new MySqlConnection(connStr);
             try
@@ -48,7 +48,7 @@ namespace xbox_data
                 {
                     Keyword keyword = new Keyword();
                     string id = testRow["id"].ToString();
-                    string word = testRow["url"].ToString();
+                    string word = testRow["kword"].ToString();
                     keyword.Id = keyword;
                     keyword.Word = word;
                     seeds.Add (keyword);
@@ -57,6 +57,61 @@ namespace xbox_data
             return seeds;
         }
 
+        internal List<Seed> GetSeed()
+        {
+            List<Seed> seeds = new List<Seed>();
+            string selectSeeds_sql = "select * from regex where status = 1";
+            DataSet testDataSet = null;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            try
+            {
+
+                conn.Open();
+                // 创建一个适配器
+                MySqlDataAdapter adapter = new MySqlDataAdapter(selectSeeds_sql, conn);
+                // 创建DataSet，用于存储数据.
+                testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+            }
+            // 关闭数据库连接.
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            if (testDataSet != null && testDataSet.Tables["result_data"] != null && testDataSet.Tables["result_data"].Rows != null)
+            {
+                foreach (DataRow testRow in testDataSet.Tables["result_data"].Rows)
+                {
+                    Seed seed = new Seed();
+                    string id = testRow["id"].ToString();
+                    string url= testRow["vurl"].ToString();
+                    string list = testRow["vlist"].ToString();
+                    string time= testRow["vtime"].ToString();
+                    string encoding = testRow["vencoding"].ToString();
+                    string title = testRow["vtitle"].ToString();
+                    string name = testRow["vname"].ToString();
+                    string link = testRow["vlink"].ToString();
+                    //string url = testRow["vurl"].ToString();
+                    seed.Id = id;
+                    seed.Url = url;
+                    seed.List = list;
+                    seed.Time = time;
+                    seed.Title = title;
+                    seed.Name = name;
+                    seed.Link = link;
+                    seeds.Add(seed);
+                }
+            }
+            return seeds;
+        }
 
         public void InsertSQL(string sql)
         {
