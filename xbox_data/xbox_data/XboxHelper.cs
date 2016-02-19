@@ -30,9 +30,7 @@ namespace xbox_data
                     string sql = "";
                     foreach (Video one_video in v_list)
                     {
-                        sql += string.Format("insert into cache set curl='{0}',ctitle='{1}',k_id='{2}',r_id='{3}';\n\t",one_video.Link,one_video.Title,one_keyword.Id,one_seed.Id);
-
-
+                        sql += string.Format("insert into cache set c_url='{0}',c_title='{1}',k_id='{2}',r_id='{3}',c_thumb='{4}',c_time='{5}';\n\t",one_video.Link,one_video.Title,one_keyword.Id,one_seed.Id,one_video.Pic,one_video.Time);
                     }
                     mysqlhelper.InsertSQL(sql);
                 }

@@ -7,7 +7,8 @@ namespace xbox_data
 {
     internal class MysqlHelper
     {
-        private String connStr = "server=awol.cvlp2mlfriyg.us-west-2.rds.amazonaws.com; uid=heavenlw;pwd=550804648;database=xbox_data";
+        private String connStr = "server=awol.cvlp2mlfriyg.us-west-2.rds.amazonaws.com; uid=heavenlw;pwd=550804648;database=xbox_data;";
+        //private String connStr = "server=localhost; uid=root;pwd=123456;database=xbox_data;";
         internal void Handle(List<Video> v_list)
         {
             
@@ -48,8 +49,8 @@ namespace xbox_data
                 {
                     Keyword keyword = new Keyword();
                     string id = testRow["id"].ToString();
-                    string word = testRow["kword"].ToString();
-                    keyword.Id = keyword;
+                    string word = testRow["k_word"].ToString();
+                    keyword.Id = id;
                     keyword.Word = word;
                     seeds.Add (keyword);
                 }
@@ -92,14 +93,15 @@ namespace xbox_data
                 {
                     Seed seed = new Seed();
                     string id = testRow["id"].ToString();
-                    string url= testRow["vurl"].ToString();
-                    string list = testRow["vlist"].ToString();
-                    string time= testRow["vtime"].ToString();
-                    string encoding = testRow["vencoding"].ToString();
-                    string title = testRow["vtitle"].ToString();
-                    string name = testRow["vname"].ToString();
-                    string link = testRow["vlink"].ToString();
-                    //string url = testRow["vurl"].ToString();
+                    string url= testRow["v_url"].ToString();
+                    string list = testRow["v_list"].ToString();
+                    string time= testRow["v_time"].ToString();
+                    string encoding = testRow["v_encoding"].ToString();
+                    string title = testRow["v_title"].ToString();
+                    string name = testRow["v_name"].ToString();
+                    string link = testRow["v_link"].ToString();
+                    string pic = testRow["v_thumb"].ToString();
+                    ///string time = testRow["v_time"].ToString();
                     seed.Id = id;
                     seed.Url = url;
                     seed.List = list;
@@ -107,6 +109,8 @@ namespace xbox_data
                     seed.Title = title;
                     seed.Name = name;
                     seed.Link = link;
+                    seed.Pic = pic;
+                    //seed.Time = time;
                     seeds.Add(seed);
                 }
             }
