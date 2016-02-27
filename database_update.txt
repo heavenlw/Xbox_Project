@@ -1,0 +1,7 @@
+1.取消对keyword表的外键约束
+2.cache添加curl字段
+3.添加insert_time和update_time字段
+4.修改cstate命名
+5.修改数据库字符编码
+6.对video_url做唯一索引
+http://www.soku.com/v/q_{0}_orderby_1_limitdate_0?site=14&_lg=1&lengthtype=1
