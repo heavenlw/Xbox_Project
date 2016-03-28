@@ -11,8 +11,11 @@ namespace Handle_Data
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
+            //JsonHelper jsonhelper = new JsonHelper();
+            //jsonhelper.HandleJson();
             string text = Properties.Settings.Default.json;
             //string json = Properties.Settings.Default.Json;
             JObject jobject = (JObject)JsonConvert.DeserializeObject(text);

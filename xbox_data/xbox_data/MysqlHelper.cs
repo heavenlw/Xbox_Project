@@ -171,7 +171,7 @@ namespace xbox_data
             // 定义需要执行的SQL语句.
             insertCommand.CommandText = sql;
             // 注意： 只有加了这一句， 才能事务处理！！！
-            insertCommand.Transaction = t;
+            //insertCommand.Transaction = t;
             int insertRowCount = insertCommand.ExecuteNonQuery();
         }
     }

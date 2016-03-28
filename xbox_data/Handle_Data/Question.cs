@@ -1,12 +1,10 @@
-﻿namespace xbox_rest.Controllers
+﻿namespace Handle_Data
 {
-    public class Question
+    internal class Question
     {
-        internal string id;
-
         public Question()
         {
-
+             
         }
         public string questionID { get; set; }
         public string questionNo { get; set; }
@@ -21,6 +19,6 @@
         public string isOut { get; set; }
         //public string groupInfo { get; set; }
         public string hot { get; set; }
-        // public string questionAudio { get; set; }
+       // public string questionAudio { get; set; }
     }
 }
