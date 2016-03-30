@@ -64,9 +64,110 @@ namespace xbox_rest.Controllers
             return question_list;
         }
 
-        internal IHttpActionResult GetExplainDetail(string id)
+        public Question randomById(string id)
         {
-            string sql = string.Format("select * from keyword k,text t,cache c where k.course_id ={0} and k.id= t.kid=c.k_id limit 3",id);
+            Question question = new Question();
+            string sql = string.Format("select * from question where courseSectionID='{0}' and questionType=2 ORDER BY RAND() limit 1", id);
+            DataSet testDataSet = null;
+            MySqlConnection conn = new MySqlConnection(connStr_local);
+            try
+            {
+                conn.Open();
+                // 创建一个适配器
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
+                // 创建DataSet，用于存储数据.
+                testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+            }
+            // 关闭数据库连接.
+            catch (Exception e)
+            {
+                //log4net.ILog log = log4net.LogManager.GetLogger("MyLogger");
+                //log.Debug(e.Message);
+                conn.Close();
+                Console.WriteLine(e.Message);
+                return question;
+                //Console.ReadLine();
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            if (testDataSet != null && testDataSet.Tables["result_data"] != null && testDataSet.Tables["result_data"].Rows != null)
+            {
+                foreach (DataRow testRow in testDataSet.Tables["result_data"].Rows)
+                {
+                    //Question question = new Question();
+                    string content = testRow["content"].ToString();
+                    question.questionID = testRow["questionID"].ToString();
+                    question.difficulty = testRow["difficulty"].ToString();
+                    question.content = content;
+                    question.questionType = testRow["questionType"].ToString();
+                    question.rightAnswer = testRow["rightAnswer"].ToString();
+                    question.answerExplain = testRow["answerExplain"].ToString();
+                   
+
+                }
+            }
+            return question;
+        }
+
+        public Explain GetExplainDetail(string id)
+        {
+            string sql = string.Format("select * from keyword k, cache c where k.course_id ={0} and k.id= c.k_id limit 3", id);
+            Explain explain = new Explain();
+            DataSet testDataSet = null;
+            MySqlConnection conn = new MySqlConnection(connStr_local);
+            try
+            {
+                conn.Open();
+                // 创建一个适配器
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
+                // 创建DataSet，用于存储数据.
+                testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+            }
+            // 关闭数据库连接.
+            catch (Exception e)
+            {
+                //log4net.ILog log = log4net.LogManager.GetLogger("MyLogger");
+                //log.Debug(e.Message);
+                conn.Close();
+                Console.WriteLine(e.Message);
+                return explain;
+                //Console.ReadLine();
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            if (testDataSet != null && testDataSet.Tables["result_data"] != null && testDataSet.Tables["result_data"].Rows != null)
+            {
+                foreach (DataRow testRow in testDataSet.Tables["result_data"].Rows)
+                {
+                    explain.word = testRow["k_word"].ToString();
+                    explain.course_id = testRow["course_id"].ToString();
+                    explain.content = testRow["content"].ToString();
+                    Video video = new Video();
+                    video.url = testRow["c_url"].ToString();
+                    video.title = testRow["c_title"].ToString();
+                    video.pic = testRow["c_thumb"].ToString();
+                    video.time = testRow["c_time"].ToString();
+                    video.flash = testRow["flash"].ToString();
+                    video.embed = testRow["embed"].ToString();
+                    video.iframe = testRow["iframe"].ToString();
+                    
+                    explain.video_list.Add(video);
+
+                }
+            }
+            return explain;
+
+
 
         }
 

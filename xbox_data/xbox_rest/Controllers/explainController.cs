@@ -10,10 +10,10 @@ namespace xbox_rest.Controllers
     public class explainController : ApiController
     {
         [HttpGet]
-        public IHttpActionResult Explain(string id)
+        public Explain Explain(string id)
         {
             MysqlHelper mysqlhelper = new MysqlHelper();
-          return   mysqlhelper.GetExplainDetail(id);
+          return  mysqlhelper.GetExplainDetail(id);
 
         }
     }

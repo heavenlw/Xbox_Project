@@ -15,10 +15,7 @@ namespace xbox_data
             List<Seed> seed_list = new List<Seed>();
             MysqlHelper mysqlhelper = new MysqlHelper();
             k_list = mysqlhelper.GetKeywordList();
-
             seed_list = mysqlhelper.GetSeed();
-
-            
             foreach (Keyword one_keyword in k_list)
             {
                 Console.WriteLine("Searching keyword:    " + one_keyword.Word);
@@ -30,7 +27,7 @@ namespace xbox_data
                     string sql = "";
                     foreach (Video one_video in v_list)
                     {
-                        sql += string.Format("insert into cache set c_url='{0}',c_title='{1}',k_id='{2}',r_id='{3}',c_thumb='{4}',c_time='{5}';\n\t",one_video.Link,one_video.Title,one_keyword.Id,one_seed.Id,one_video.Pic,one_video.Time);
+                        sql += string.Format("insert into cache set c_url='{0}',c_title='{1}',k_id='{2}',r_id='{3}',c_thumb='{4}',c_time='{5}',flash='{6}',embed='{7}',iframe='{8}',course_id='{9}';\n\t",one_video.Link,one_video.Title,one_keyword.Id,one_seed.Id,one_video.Pic,one_video.Time,one_video.Flash,one_video.Embed,one_video.Iframe,one_keyword.Course_Id);
                     }
                     mysqlhelper.InsertSQL(sql);
                 }

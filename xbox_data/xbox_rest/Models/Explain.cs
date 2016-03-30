@@ -1,11 +1,13 @@
-﻿namespace xbox_rest.Controllers
+﻿using System.Collections.Generic;
+
+namespace xbox_rest.Controllers
 {
-    internal class Explain
+    public class Explain
     {
+        List<Video> v_list = new List<Video>();
        public string course_id { get; set; }
         public string word { get; set; }
         public string content { get; set; } 
-        public string v_url { get; set; }
-        public string v_title { get; set; }
+        public List<Video> video_list { get { return v_list; } set { value = v_list; } }
     }
 }

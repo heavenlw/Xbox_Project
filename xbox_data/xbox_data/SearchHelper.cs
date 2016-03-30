@@ -19,7 +19,7 @@ namespace xbox_data
         internal List<Video> Search(Keyword one_keyword,Seed seed)
         {
             List<Video> video_list = new List<Video>();
-            for (int i = 1; i <= 20; i++)
+            for (int i = 1; i <= 1; i++)
             {
                 string url = string.Format(seed.Url, one_keyword.Word,i);
                 // List<string> url_list = new List<string>();
@@ -74,13 +74,30 @@ namespace xbox_data
                         video.Link = link;
                         video.Time = time;
                         video.Pic = pic_url;
+                        if (seed.Name == "souku")
+                        {
+                            HandleYouKu(ref video);
+                        }
                         Console.WriteLine(title);
+                        if(!video.Title.Contains("高中"))
                         video_list.Add(video);
                     }
 
                 }
             }
             return video_list;
+        }
+
+        private void HandleYouKu(ref Video video)
+        {
+            var u_id = Regex.Match(video.Link, "id_(.*?).html",RegexOptions.Singleline).Groups[1].ToString().Trim();
+            if (u_id != null)
+            {
+                video.Flash = "http://player.youku.com/player.php/sid/"+u_id+ "/v.swf";
+                video.Embed = video.Flash;
+                video.Iframe = "http://player.youku.com/embed/"+u_id;
+             }
+          
         }
 
         private string CleanTheLink(string link)

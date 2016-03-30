@@ -45,8 +45,12 @@ namespace xbox_rest.Controllers
             return Ok(mysqlhelper.SelectExp(sql));
 
         }
-     
-
+        [HttpGet]
+        public Question ExplainQuestion(string id)
+        {
+            MysqlHelper mysqlhelper = new MysqlHelper();
+          return  mysqlhelper.randomById(id);
+        }
 
 
     }
