@@ -7,7 +7,8 @@ namespace xbox_data
 {
     internal class MysqlHelper
     {
-        private String connStr = "server=awol.cvlp2mlfriyg.us-west-2.rds.amazonaws.com; uid=heavenlw;pwd=550804648;database=xbox_data;";
+        //private String connStr = "server=awol.cvlp2mlfriyg.us-west-2.rds.amazonaws.com; uid=heavenlw;pwd=550804648;database=xbox_data;";
+        private String connStr = "server=localhost;uid=root;pwd=123456;database=xbox_data;Charset=utf8";
 
         internal List<Trans> GetText()
         {

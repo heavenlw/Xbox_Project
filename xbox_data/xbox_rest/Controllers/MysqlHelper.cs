@@ -14,6 +14,7 @@ namespace xbox_rest.Controllers
         {
         }
 
+
         internal List<Question> getQuestion(string id)
         {
             List<Question> question_list = new List<Question>();
@@ -62,6 +63,86 @@ namespace xbox_rest.Controllers
                 }
             }
             return question_list;
+        }
+
+        internal string UpdateChapter(string id, string chapter)
+        {
+            chapter = DateTime.Now.ToShortDateString()+":" + chapter;
+            string sql = string.Format("update user set u_chapter='{0}',last_update='{2}' where id ='{1}'", chapter,id,DateTime.Now);
+            string error = null;
+            MySqlConnection conn = null;
+            try
+            {
+                conn = new MySqlConnection(connStr_local);
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
+                // 创建DataSet，用于存储数据.
+                DataSet testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+                return "success";
+            }
+            catch (Exception t)
+            {
+                return t.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
+        internal string UpdateCurrentLevel(User user)
+        {
+            string sql = string.Format("update user set u_course_now={0} where id ='{1}'", user.CurrentlevelId, user.Id);
+            string error = null;
+            MySqlConnection conn = null;
+            try
+            {
+                conn = new MySqlConnection(connStr_local);
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
+                // 创建DataSet，用于存储数据.
+                DataSet testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+                return "success";
+            }
+            catch (Exception t)
+            {
+                return t.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        internal void InsertGoal(User user)
+        {
+            string sql = string.Format("update user set  where id ='{1}'", user.Power, user.Id);
+            string error = null;
+            MySqlConnection conn = null;
+            try
+            {
+                conn = new MySqlConnection(connStr_local);
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
+                // 创建DataSet，用于存储数据.
+                DataSet testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+               // return "success";
+            }
+            catch (Exception t)
+            {
+                //return t.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public Question randomById(string id)
@@ -243,12 +324,12 @@ namespace xbox_rest.Controllers
 
         public User CheckStatus(User user)
         {
-            string sql = string.Format("select * from user where u_id = '{0}'", user.Id);
+            string sql = string.Format("select * from user where id = '{0}'", user.Id);
             DataSet testDataSet = null;
             MySqlConnection conn = new MySqlConnection(connStr_local);
             try
             {
-                conn.Open();
+                conn.Open();     
                 // 创建一个适配器
                 MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
                 // 创建DataSet，用于存储数据.
@@ -274,9 +355,11 @@ namespace xbox_rest.Controllers
                     user.Name = testDataSet.Tables["result_data"].Rows[0]["u_name"].ToString();
                     user.Status = "Success";
                     user.Id = testDataSet.Tables["result_data"].Rows[0]["id"].ToString();
-                    user.CourseInfo = GetCourseList(testDataSet.Tables["result_data"].Rows[0]["u_courseId"].ToString());
+                    user.CourseInfo = GetCourseList(testDataSet.Tables["result_data"].Rows[0]["u_courseId"].ToString(),user.Id);
                     user.Power = testDataSet.Tables["result_data"].Rows[0]["u_power"].ToString();
-                    return user;
+                    user.u_Chapter = testDataSet.Tables["result_data"].Rows[0]["u_chapter"].ToString();
+                    user.last_update = testDataSet.Tables["result_data"].Rows[0]["last_update"].ToString();
+                return user;
               
             }
             else
@@ -295,8 +378,9 @@ namespace xbox_rest.Controllers
         }
 
         internal string UpdatePower(User user)
-        {
-            string sql = string.Format("update user set u_power=u_power+{0} where id ='{1}'", user.Power, user.Id);
+       {
+            
+            string sql = string.Format("update user set u_power=u_power+{0},u_courseid=concat(u_courseid,+'{3};') where id ='{1}'", user.Power, user.Id,user.CourseNow,user.CourseNow+","+user.MasterCourse);
             string error = null;
             MySqlConnection conn = null;
             try
@@ -322,7 +406,7 @@ namespace xbox_rest.Controllers
 
         public User SearchUser(User user)
         {
-            string sql = string.Format("select * from user where u_name = '{0}'", user.Name);
+            string sql = string.Format("select * from user u,keyword k where u.u_name = '{0}' and k.course_id = u.u_course_now", user.Name);
             DataSet testDataSet = null;
             MySqlConnection conn = new MySqlConnection(connStr_local);
             try
@@ -354,9 +438,12 @@ namespace xbox_rest.Controllers
                 if (testDataSet.Tables["result_data"].Rows[0]["u_password"].ToString() == user.Password)
                 {
                     user.Status = "Success";
+                    user.Grade= testDataSet.Tables["result_data"].Rows[0]["u_grade"].ToString();
                     user.Id = testDataSet.Tables["result_data"].Rows[0]["id"].ToString();
-                    user.CourseInfo = GetCourseList(testDataSet.Tables["result_data"].Rows[0]["u_courseId"].ToString());
+                    user.CourseInfo = GetCourseList(testDataSet.Tables["result_data"].Rows[0]["u_courseId"].ToString(),user.Id);
                     user.Power = testDataSet.Tables["result_data"].Rows[0]["u_power"].ToString();
+                    user.CourseNow =int.Parse(testDataSet.Tables["result_data"].Rows[0]["u_course_now"].ToString());
+                    user.CourseNowName = testDataSet.Tables["result_data"].Rows[0]["k_word"].ToString();
                     return user;
                 }
                 else
@@ -382,10 +469,14 @@ namespace xbox_rest.Controllers
             }
         }
 
-        private List<CourseInfo> GetCourseList(string courseList)
+        private List<CourseInfo> GetCourseList(string courseList,string user_id)
         {
             List<CourseInfo> list = new List<CourseInfo>();
+            //SeedHelper seed = new SeedHelper();
+            // var seed_list = seed.GetSeed();
+          
             string[] courses = courseList.Split(';');
+            int t = 0;
             if (courses.Length > 0)
             {
                 foreach (string course in courses)
@@ -393,10 +484,63 @@ namespace xbox_rest.Controllers
                     CourseInfo courseinfo = new CourseInfo();
                     courseinfo.Id = Regex.Match(course, "(.*?),").Groups[1].ToString().Trim();
                     courseinfo.Degree = Regex.Match(course, ",(.*)").Groups[1].ToString().Trim();
-                    list.Add(courseinfo);
+                    var find_c = list.Find(CourseInfo => CourseInfo.Id == courseinfo.Id);
+                    if (find_c != null)
+                    {
+
+                        list.Find(CourseInfo => CourseInfo.Id == courseinfo.Id).Degree =(int.Parse(find_c.Degree)+int.Parse(courseinfo.Degree)).ToString();
+                        t = 1;
+                    }
+                    else
+                    {
+                        if (courseinfo.Id != "")
+                        {
+                            list.Add(courseinfo);
+                        }
+                    }
+                }
+                if (t == 1)
+                {
+                    UpdateCourseList(list,user_id);
                 }
             }
+
+
+
             return list;
+        }
+
+        private void UpdateCourseList(List<CourseInfo> list, string user_id)
+        {
+            string course_list = "";
+            foreach (CourseInfo c in list)
+            {
+                    course_list += (c.Id + "," + c.Degree + ";");
+            }
+            string sql = string.Format("update user set u_courseid = '{0}' where id ='{1}'",course_list,user_id);
+            string error = null;
+            MySqlConnection conn = null;
+            try
+            {
+                conn = new MySqlConnection(connStr_local);
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn);
+                // 创建DataSet，用于存储数据.
+                DataSet testDataSet = new DataSet();
+                // 执行查询，并将数据导入DataSet.
+                adapter.Fill(testDataSet, "result_data");
+                // return "success";
+            }
+            catch (Exception t)
+            {
+                //return t.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+
         }
 
         internal List<Question> SelectExp(string sql)

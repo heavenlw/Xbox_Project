@@ -22,6 +22,9 @@ namespace xbox_rest.Controllers
         }
         public string Id { get; set; }
         public string name { get; set; }
-        public string FatherId { get; internal set; }
+        public string FatherId { get;set; }
+        public int Degree_2 { get; set; }
+        public int Degree_3 { get; set; }
+        public int Degree_1 { get; set; }
     }
 }

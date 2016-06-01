@@ -4,6 +4,10 @@ namespace xbox_rest.Controllers
 {
     public class User
     {
+        public string last_update { get; set; }
+
+        public string u_Chapter { get; set; }
+
         public string Id { get; set; }
         public object Name { get; set; }
         public string Password { get;  set; }
@@ -21,6 +25,9 @@ namespace xbox_rest.Controllers
         public string Gender { get; set; }
 
         public int Age { get; set; }
-
+        public int CourseNow { get;  set; }
+        public int MasterCourse { get; set; }
+        public int CurrentlevelId { get; set; }
+        public string CourseNowName { get;  set; }
     }
 }

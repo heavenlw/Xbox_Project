@@ -32,15 +32,16 @@ namespace Handle_Data
             {
                 if (seed.level1_courseSectionID.Length > 0)
                 {
-                   
+
                     if (tree.children.Find(Seed => Seed.Id == seed.level1_courseSectionID) == null)
                     {
                         Seed new_seed = new Seed();
                         new_seed.Id = seed.level1_courseSectionID;
                         new_seed.name = seed.level1_sectionName;
-                        
+                        new_seed.rank = "1";
+
                         tree.children.Add(new_seed);
-                        
+
                     }
 
                     if (seed.level2_courseSectionID.Length > 0)
@@ -49,22 +50,26 @@ namespace Handle_Data
                         {
                             Seed new_seed = new Seed();
                             new_seed.Id = seed.level2_courseSectionID;
+                            new_seed.FatherId = seed.level1_courseSectionID;
                             new_seed.name = seed.level2_sectionName;
+
+                            new_seed.rank = "2";
                             tree.children.Find(Seed => Seed.Id == seed.level1_courseSectionID).children.Add(new_seed);
                         }
                     }
                     if (seed.level3_courseSectionID.Length > 0)
                     {
-                        if (tree.children.Find(Seed => Seed.Id == seed.level1_courseSectionID).children.Find(Seed => Seed.Id  == seed.level2_courseSectionID).children.Find(Seed => Seed.Id == seed.level3_courseSectionID) == null)
+                        if (tree.children.Find(Seed => Seed.Id == seed.level1_courseSectionID).children.Find(Seed => Seed.Id == seed.level2_courseSectionID).children.Find(Seed => Seed.Id == seed.level3_courseSectionID) == null)
                         {
                             Seed new_seed = new Seed();
                             new_seed.Id = seed.level3_courseSectionID;
                             new_seed.name = seed.level3_sectionName;
-                            tree.children.Find(Seed => Seed.Id== seed.level1_courseSectionID).children.Find(Seed => Seed.Id == seed.level2_courseSectionID).children.Add(new_seed);
+                            new_seed.FatherId = seed.level2_courseSectionID;
+                            new_seed.GrandPaId = seed.level1_courseSectionID;
+                            new_seed.rank = "3";
+                            tree.children.Find(Seed => Seed.Id == seed.level1_courseSectionID).children.Find(Seed => Seed.Id == seed.level2_courseSectionID).children.Add(new_seed);
                         }
                     }
-
-
                 }
             }
             string json = JsonConvert.SerializeObject(tree);

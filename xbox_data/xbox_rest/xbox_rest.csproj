@@ -251,6 +251,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Baidu_Data.cs" />
+    <Compile Include="Controllers\Tree.cs" />
+    <Compile Include="Controllers\UserHelper.cs" />
     <Compile Include="Models\Explain.cs" />
     <Compile Include="Controllers\explainController.cs" />
     <Compile Include="Models\CourseInfo.cs" />
@@ -313,6 +316,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Properties\PublishProfiles\xboxweb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
