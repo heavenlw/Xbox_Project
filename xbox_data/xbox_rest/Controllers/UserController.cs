@@ -17,7 +17,11 @@ namespace xbox_rest.Controllers
            return  seedhelper.GetSeed();
         }
 
-
+        /// <summary>
+        /// 用户登录接口
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public User LoginUser([FromBody]User user)
         {
@@ -27,6 +31,11 @@ namespace xbox_rest.Controllers
          
             return status;
         }
+        /// <summary>
+        /// 注册接口
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public User Register([FromBody]User user)
         {
@@ -34,19 +43,33 @@ namespace xbox_rest.Controllers
             mysqlhelper.CreatUser(ref user);
             return user;
         }
+        /// <summary>
+        /// 判断是否重名用户
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
         public bool NameSearch(string name)
         {
             MysqlHelper mysqlhelper = new MysqlHelper();
             return mysqlhelper.SearchName(name);
         }
+        /// <summary>
+        /// 更新energy point
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public string UpdatePower([FromBody]User user)
         {
             MysqlHelper mysqlhelper = new MysqlHelper();
           return   mysqlhelper.UpdatePower(user);
         }
-
+        /// <summary>
+        /// 根据用户id获取用户最新的详细信息，用于实时刷新功能
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public User UserStatus([FromBody]User user)
         {
             MysqlHelper mysqlhelper = new MysqlHelper();
@@ -59,6 +82,11 @@ namespace xbox_rest.Controllers
             mysqlhelper.InsertGoal(user);
            
         }
+        /// <summary>
+        /// 接收前段更新的当前所在章节，并更新到数据库
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public string UpdateCurrentLevel([FromBody]User user)
         {
@@ -82,14 +110,32 @@ namespace xbox_rest.Controllers
             string result = "";
             Tree tree = new Tree();
             tree.name = "初中数学上";
+            tree.itemStyle.normal.label.show = false;
+          
             foreach (Seed seed in final_tree.children)
             {
                 Tree one_tree_2 = new Tree();
                 one_tree_2.name = seed.name;
-                foreach(Seed seed_2 in seed.children)
+                if (seed.Degree_1 < 20)
+                {
+                    one_tree_2.itemStyle.normal.color = "#332B2B";
+                }
+                else
+                {
+                    one_tree_2.itemStyle.normal.color = "#19C9FF";
+                }
+                foreach (Seed seed_2 in seed.children)
                 {
                     Tree tree_3 = new Tree();
                     tree_3.name = seed_2.name;
+                    if (seed_2.Degree_2 < 20)
+                    {
+                        tree_3.itemStyle.normal.color = "#332B2B";
+                    }
+                    else
+                    {
+                        tree_3.itemStyle.normal.color = "#19C9FF";
+                    }
                     one_tree_2.children.Add(tree_3);
 
                 }

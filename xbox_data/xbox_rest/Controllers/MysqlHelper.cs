@@ -9,7 +9,7 @@ namespace xbox_rest.Controllers
 {
     internal class MysqlHelper
     {
-        private static string connStr_local = System.Configuration.ConfigurationManager.AppSettings["Conn2"];
+        private static string connStr_local = System.Configuration.ConfigurationManager.AppSettings["Conn1"];
         public MysqlHelper()
         {
         }

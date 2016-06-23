@@ -82,6 +82,11 @@ namespace xbox_rest.Controllers
            "\":\"\"},{\"level1_courseSectionID\":\"149442\",\"level1_sectionName\":\"第25章 概率初步\",\"level" +
            "2_courseSectionID\":\"149447\",\"level2_sectionName\":\"25.3 用频率估计概率\",\"level3_courseSe" +
            "ctionID\":\"\",\"level3_sectionName\":\"\"}]}";
+
+        /// <summary>
+        /// 根据json文件将章节数据序列化为树结构
+        /// </summary>
+        /// <returns></returns>
         public Seed GetSeed()
         {
 
